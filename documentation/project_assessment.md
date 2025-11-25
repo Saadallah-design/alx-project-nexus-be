@@ -172,7 +172,7 @@ db.sqlite3
 - ✅ Using environment variables for secrets
 - ✅ PostgreSQL instead of SQLite (production-ready)
 - ✅ UUID primary keys (harder to guess)
-- ⚠️ Verify `.env` is in `.gitignore`
+- ✅ Verify `.env` is in `.gitignore` (verified)
 - ⚠️ Set `DEBUG=False` in production
 - ⚠️ Configure `ALLOWED_HOSTS` for production
 - ⚠️ Add CORS headers if needed
