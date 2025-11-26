@@ -65,3 +65,4 @@ def create_user(self, email, password=None, **extra_fields):
 * Captures any additional keyword arguments
 * Allows passing first_name, last_name, is_active, etc.
 * Makes the method flexible for different scenarios
+
