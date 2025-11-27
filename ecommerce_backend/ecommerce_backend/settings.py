@@ -1,6 +1,8 @@
 
 from pathlib import Path
 import environ
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     # 'users',
     'users.apps.UsersConfig',
     'catalog',
+    'rest_framework_simplejwt.token_blacklist',
     
     # 'cart',
     # 'orders',
@@ -136,3 +139,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #  using the custom user model - to define in the users app later.
 AUTH_USER_MODEL = 'users.CustomUser'
+
+
+# Setting the JWT configuration 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # Default security setting: only authenticated users can access the API
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
+}
+
+# simple JWT configuration
+# this requires an import of: timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+
+    
+    'ROTATE_REFRESH_TOKENS': True, #When set to True, if a refresh token is submitted to the TokenRefreshView, a new refresh token will be returned along with the new access token.
+    'BLACKLIST_AFTER_ROTATION': True, #When set to True, the old refresh token will be blacklisted after rotation.
+    # for the blacklist_after_rotation it requires being added to installed apps: 'rest_framework_simplejwt.token_blacklist',
+    'ALGORITHM': 'HS256', #The algorithm used for signing the tokens.
+    'SIGNING_KEY': SECRET_KEY, # Uses the secret key we set earlier
+    'AUTH_HEADER_TYPES': ('Bearer',),
+
+    # here the user identification settings relate the token back to the custom user in our project which uses UUID as primary key
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}

@@ -40,6 +40,7 @@ class CustomUser(AbstractUser):
     #  unique=True, ensuring every user has a unique email. This is the primary login identifier for our API.
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    # this id is being used by the JWT setting for user identification
     # Instead of using the default sequential integer primary key (SERIAL), 
     # we use a UUID (Universally Unique Identifier). This is a best practice for API backends 
     # because UUIDs are harder to guess than sequential IDs, improving security and better supporting horizontal scaling.
