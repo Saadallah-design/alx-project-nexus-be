@@ -1,6 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from users.views import UserRegistrationView
 
 # setting our JWT 
 from rest_framework_simplejwt.views import (
@@ -12,6 +13,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/catalog/', include('catalog.urls')),
+    path('api/auth/', include('users.urls')),
 
 
     # JWT urls
@@ -20,4 +22,7 @@ urlpatterns = [
     path('api/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
+
+    # setting user registration urls
+    # path('api/auth/register/', UserRegistrationView.as_view(), name='user_registration'),
 ]
