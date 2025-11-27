@@ -29,3 +29,17 @@ class ProductListCreateView(generics.ListCreateAPIView):
         
         return queryset
 
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+    """API endpoint to retrieve, update, or delete a specific product."""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # instead of using uuid pk I will be using the lookup_field
+    # the uuid are good for scalability and security but not for user experience
+    lookup_field = 'id'
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    """API endpoint to retrieve, update, or delete a specific category."""
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    # instead of using uuid pk I will be using the lookup_field
+    lookup_field = 'slug'
