@@ -56,4 +56,4 @@ class OrderItemManageView(generics.ListCreateAPIView):
 
         except OrderItem.DoesNotExist:
             # if not exist create it
-            serializer.save(order=cart, product=product, price=product.price)
+            serializer.save(order=cart, product=product, price=product.sale_price)
