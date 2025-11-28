@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializers import UserRegistrationSerializer, UserRegistrationResponseSerializer
-from rest_framework.permissions import AllowAny
+from .serializers import UserRegistrationSerializer, UserRegistrationResponseSerializer, UserProfileSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class UserRegistrationView(generics.CreateAPIView):
     #  API endpoint for user registration.
@@ -24,3 +24,16 @@ class UserRegistrationView(generics.CreateAPIView):
         # Use response serializer to return clean data
         response_serializer = UserRegistrationResponseSerializer(user)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+
+# User Profile View
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    """API endpoint for logged-in users to retrieve and update their own profile."""
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    # We override this method to ensure a user only sees *their own* data.
+    def get_object(self):
+        # This code tells DRF to use the user object attached to the request (via the JWT token)
+        return self.request.user

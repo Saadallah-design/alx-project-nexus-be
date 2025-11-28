@@ -65,3 +65,13 @@ class UserRegistrationResponseSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name')
     
+
+# Setting the user serializer for the user model : User Profile View Serializer
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name')
+
+        # Ensure 'id' and 'email' cannot be modified by the user
+        read_only_fields = ('id', 'email')
