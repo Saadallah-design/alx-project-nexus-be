@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from rest_framework.permissions import IsAuthenticated
 from .models import Order, OrderItem
 from .serializers import CartSerializer, OrderItemSerializer
@@ -57,3 +57,33 @@ class OrderItemManageView(generics.ListCreateAPIView):
         except OrderItem.DoesNotExist:
             # if not exist create it
             serializer.save(order=cart, product=product, price=product.sale_price)
+
+
+# Now adding functionality of updating or deleting items in the cart
+
+class OrderItemDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint to retrieve, update, or delete a single OrderItem within the active cart.
+    """
+    serializer_class = OrderItemSerializer
+    permission_classes = (IsAuthenticated,)
+
+    # Crucially, we MUST ensure users can only modify items in their own active cart.
+    def get_queryset(self):
+        # 1. Find the user's active cart to return it and update it
+        cart, _ = Order.objects.get_or_create(
+            user=self.request.user, 
+            status='CART'
+        )
+        # 2. Return only the OrderItems belonging to that cart
+        return OrderItem.objects.filter(order=cart)
+
+    # ensure that quantity cannot drop below 1 during an update.
+    def perform_update(self, serializer):
+        quantity = serializer.validated_data.get('quantity')
+        
+        # Prevent setting the quantity to 0 or less via an update
+        if quantity is not None and quantity < 1:
+            raise serializers.ValidationError({"quantity": "Quantity must be at least 1, or use DELETE to remove the item."})
+
+        serializer.save()
