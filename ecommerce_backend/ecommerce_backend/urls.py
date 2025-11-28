@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/catalog/', include('catalog.urls')),
     path('api/auth/', include('users.urls')),
+    path('api/cart/', include('orders.urls')),
 
 
     # JWT urls
