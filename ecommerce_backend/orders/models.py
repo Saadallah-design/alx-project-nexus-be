@@ -20,9 +20,17 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
 
     # setting up the order model for the checkout flow
+    # Contact Information
+    first_name = models.CharField(max_length=100, blank=True)
+    last_name = models.CharField(max_length=100, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+    
     # Shipping Fields
     shipping_address = models.CharField(max_length=255, blank=True)
+    shipping_address_line_2 = models.CharField(max_length=255, blank=True)
     shipping_city = models.CharField(max_length=100, blank=True)
+    shipping_state = models.CharField(max_length=100, blank=True)
     shipping_postal_code = models.CharField(max_length=20, blank=True)
     shipping_country = models.CharField(max_length=100, default='Morocco')
 
@@ -48,6 +56,11 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - Status: {self.status}"
+
+    # payment tracking part
+    payment_method = models.CharField(max_length=50, blank=True)  # to try: 'mock', 'stripe', 'paypal'
+    payment_intent_id = models.CharField(max_length=255, blank=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
 
 
 # ---- OrderItem Model ----
@@ -76,3 +89,5 @@ class OrderItem(models.Model):
 
     class Meta:
         unique_together = ('order', 'product') # A cart/order should not have the same product listed twice.
+
+

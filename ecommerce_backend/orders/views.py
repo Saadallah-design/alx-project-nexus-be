@@ -1,8 +1,9 @@
 from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
 from .models import Order, OrderItem
-from .serializers import CartSerializer, OrderItemSerializer, CheckoutSerializer
+from .serializers import CartSerializer, OrderItemSerializer, CheckoutSerializer, OrderDetailSerializer
 from rest_framework.response import Response
+from django.utils import timezone # for the payment view
 
 
 # Cart Retrieve View
@@ -119,11 +120,18 @@ class CheckoutView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
-        # using get() just for extar safety 
-        # normally since first 3 fields are required, they should always be present but just adding a layer of safety
-        cart.shipping_address = serializer.validated_data.get('shipping_address')
-        cart.shipping_city = serializer.validated_data.get('shipping_city')
-        cart.shipping_postal_code = serializer.validated_data.get('shipping_postal_code')
+        # Save contact information
+        cart.first_name = serializer.validated_data.get('first_name', '')
+        cart.last_name = serializer.validated_data.get('last_name', '')
+        cart.phone_number = serializer.validated_data.get('phone_number', '')
+        cart.email = serializer.validated_data.get('email', '')
+        
+        # Save address information
+        cart.shipping_address = serializer.validated_data.get('shipping_address', '')
+        cart.shipping_address_line_2 = serializer.validated_data.get('shipping_address_line_2', '')
+        cart.shipping_city = serializer.validated_data.get('shipping_city', '')
+        cart.shipping_state = serializer.validated_data.get('shipping_state', '')
+        cart.shipping_postal_code = serializer.validated_data.get('shipping_postal_code', '')
         cart.shipping_country = serializer.validated_data.get('shipping_country', 'Morocco')
         
         # 4. Change status to PENDING
@@ -136,3 +144,61 @@ class CheckoutView(generics.GenericAPIView):
             "order_id": str(cart.id),
             "total": float(cart.total_price)
         })
+
+# Payment View
+
+class MockPaymentView(generics.GenericAPIView):
+    """For testing I will use : Mock payment- marks order as paid"""
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, order_id):
+        try:
+            order = Order.objects.get(
+                id=order_id, 
+                user=request.user, 
+                status='PENDING'
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found or not in pending status"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # "Process" payment (mock)
+        order.status = 'PAID'
+        order.payment_method = 'mock'
+        order.payment_intent_id = f'mock_{order.id}'
+        order.paid_at = timezone.now()
+        order.save()
+        
+        return Response({
+            "message": "Payment successful",
+            "order_id": str(order.id),
+            "status": order.status,
+            "paid_at": order.paid_at
+        })
+
+
+# Order History Views
+
+class OrderListView(generics.ListAPIView):
+    """List all orders for the authenticated user (excluding CART status)"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderDetailSerializer
+    
+    def get_queryset(self):
+        # Exclude cart, only show actual orders
+        return Order.objects.filter(
+            user=self.request.user
+        ).exclude(status='CART').order_by('-created_at')
+
+
+class OrderDetailView(generics.RetrieveAPIView):
+    """Get details of a specific order"""
+    permission_classes = [IsAuthenticated]
+    serializer_class = OrderDetailSerializer
+    lookup_field = 'id'
+    
+    def get_queryset(self):
+        # User can only view their own orders
+        return Order.objects.filter(user=self.request.user).exclude(status='CART')

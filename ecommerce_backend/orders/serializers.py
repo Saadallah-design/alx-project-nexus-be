@@ -43,9 +43,36 @@ class CartSerializer(serializers.ModelSerializer):
         read_only_fields = ['status','total_price','created_at']
 
 # Checkout flow serializer
-# Add to orders/serializers.py
 class CheckoutSerializer(serializers.Serializer):
+    # Contact Information
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
+    phone_number = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.EmailField(required=False, allow_blank=True)
+    
+    # Address Information
     shipping_address = serializers.CharField(required=True)
+    shipping_address_line_2 = serializers.CharField(required=False, allow_blank=True)
     shipping_city = serializers.CharField(required=True)
+    shipping_state = serializers.CharField(required=False, allow_blank=True)
     shipping_postal_code = serializers.CharField(required=True)
     shipping_country = serializers.CharField(default='Morocco')
+
+
+# Order Detail Serializer for order history
+class OrderDetailSerializer(serializers.ModelSerializer):
+    """Detailed order information for order history"""
+    items = OrderItemSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'status', 'items', 'total_price',
+            'first_name', 'last_name', 'phone_number', 'email',
+            'shipping_address', 'shipping_address_line_2',
+            'shipping_city', 'shipping_state', 
+            'shipping_postal_code', 'shipping_country',
+            'payment_method', 'paid_at',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'total_price', 'created_at', 'updated_at']

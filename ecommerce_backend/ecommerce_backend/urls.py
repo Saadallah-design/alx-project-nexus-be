@@ -2,6 +2,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from users.views import UserRegistrationView
+from django.conf import settings 
+from django.conf.urls.static import static
 
 # setting our JWT 
 from rest_framework_simplejwt.views import (
@@ -27,3 +29,6 @@ urlpatterns = [
     # setting user registration urls
     # path('api/auth/register/', UserRegistrationView.as_view(), name='user_registration'),
 ]
+# SERVING MEDIA IN DEVELOPMENT 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

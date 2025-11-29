@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, ProductImage
 
 # Register your models here.
 
@@ -8,6 +8,15 @@ from .models import Category, Product
 # since they offer less customization
 # admin.site.register(Category)
 # admin.site.register(Product)
+
+
+
+class ProductImageInline(admin.TabularInline):
+    """Inline admin for product images"""
+    model = ProductImage
+    extra = 1  # Show 1 empty form for new images
+    fields = ['image', 'alt_text', 'order', 'is_primary']
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -30,3 +39,9 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('base_price', 'stock_quantity', 'is_available', 'is_featured')
     search_fields = ('name', 'description')
     ordering = ('name',)
+    inlines = [ProductImageInline]
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ['product', 'order', 'is_primary', 'created_at']
+    list_filter = ['is_primary', 'product__category']

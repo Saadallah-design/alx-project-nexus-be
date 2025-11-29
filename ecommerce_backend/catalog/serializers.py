@@ -1,7 +1,8 @@
 # Catalog and Product Serializers
 
 from rest_framework import serializers
-from .models import Category, Product
+from .models import Category, Product, ProductImage
+from rest_framework import serializers
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -9,7 +10,26 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name', 'slug']
 
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    """Serializer for product images"""
+    image_url = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image', 'image_url', 'alt_text', 'order', 'is_primary']
+        read_only_fields = ['id']
+    
+    def get_image_url(self, obj):
+        """Return full URL for the image"""
+        request = self.context.get('request')
+        if obj.image and request:
+            return request.build_absolute_uri(obj.image.url)
+        return None
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
 
     # expose the dynamically calculated 'sale_price' property.
     sale_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True) 
@@ -27,6 +47,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'base_price', 
             'sale_price', # This references the method below
             'discount_percentage',
+            'images',
             'stock_quantity', 
             'is_available', 
             'is_featured',

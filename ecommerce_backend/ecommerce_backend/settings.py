@@ -187,3 +187,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Setting img upload path
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

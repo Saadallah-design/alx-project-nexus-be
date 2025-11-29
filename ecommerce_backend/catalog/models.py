@@ -30,6 +30,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    # for now I will keep this as fallback but I will create a seperate ProductImage model
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
 
     base_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'))
@@ -68,3 +70,33 @@ class Product(models.Model):
             discount_amount = self.base_price * (self.discount_percentage / 100)
             return self.base_price - discount_amount
         return self.base_price
+
+
+class ProductImage(models.Model):
+    """Multiple images for a product"""
+    product = models.ForeignKey(
+        Product, 
+        on_delete=models.CASCADE, 
+        related_name='images'  # Allows: product.images.all()
+    )
+    image = models.ImageField(upload_to='product_images/')
+    alt_text = models.CharField(max_length=255, blank=True, help_text="SEO alt text")
+    order = models.PositiveIntegerField(default=0, help_text="Display order")
+    is_primary = models.BooleanField(default=False, help_text="Main product image")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['order', 'created_at']  
+        verbose_name = "Product Image"
+        verbose_name_plural = "Product Images"
+    
+    def __str__(self):
+        return f"Image for {self.product.name} (Order: {self.order})"
+    
+    def save(self, *args, **kwargs):
+        # Auto-set as primary if it's the first image
+        if self.is_primary:
+            # Ensure only one primary image per product
+            ProductImage.objects.filter(product=self.product, is_primary=True).update(is_primary=False)
+        super().save(*args, **kwargs)
