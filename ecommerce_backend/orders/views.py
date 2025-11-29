@@ -1,7 +1,8 @@
-from rest_framework import generics, serializers
+from rest_framework import generics, serializers, status
 from rest_framework.permissions import IsAuthenticated
 from .models import Order, OrderItem
-from .serializers import CartSerializer, OrderItemSerializer
+from .serializers import CartSerializer, OrderItemSerializer, CheckoutSerializer
+from rest_framework.response import Response
 
 
 # Cart Retrieve View
@@ -87,3 +88,51 @@ class OrderItemDetailView(generics.RetrieveUpdateDestroyAPIView):
             raise serializers.ValidationError({"quantity": "Quantity must be at least 1, or use DELETE to remove the item."})
 
         serializer.save()
+
+# Checkout View using generics.GenericAPIView
+
+class CheckoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = CheckoutSerializer
+    
+    def post(self, request):
+        # 1. Get user's active cart
+        try:
+            # again using the user=request.user to ensure the cart belongs to the user asking for it 
+            cart = Order.objects.get(user=request.user, status='CART')
+        except Order.DoesNotExist:
+            # if no active cart is found, return a 400 Bad Request response
+            # to be edited lated to me more human readable error messages
+            return Response(
+                {"error": "No active cart found"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # 2. Validate cart has items
+        if not cart.items.exists():
+            return Response(
+                {"error": "Cart is empty"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # 3. Save shipping info
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # using get() just for extar safety 
+        # normally since first 3 fields are required, they should always be present but just adding a layer of safety
+        cart.shipping_address = serializer.validated_data.get('shipping_address')
+        cart.shipping_city = serializer.validated_data.get('shipping_city')
+        cart.shipping_postal_code = serializer.validated_data.get('shipping_postal_code')
+        cart.shipping_country = serializer.validated_data.get('shipping_country', 'Morocco')
+        
+        # 4. Change status to PENDING
+        cart.status = 'PENDING'
+        cart.save()
+        
+        # 5. Return order for payment
+        return Response({
+            "message": "Order placed. Proceed to payment.",
+            "order_id": str(cart.id),
+            "total": float(cart.total_price)
+        })

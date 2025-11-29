@@ -19,6 +19,13 @@ class Order(models.Model):
     #  (retrieved via settings.AUTH_USER_MODEL)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
 
+    # setting up the order model for the checkout flow
+    # Shipping Fields
+    shipping_address = models.CharField(max_length=255, blank=True)
+    shipping_city = models.CharField(max_length=100, blank=True)
+    shipping_postal_code = models.CharField(max_length=20, blank=True)
+    shipping_country = models.CharField(max_length=100, default='Morocco')
+
 # Status of the order
     STATUS_CHOICES = (
         ('CART', 'Shopping Cart'),

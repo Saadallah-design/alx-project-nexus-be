@@ -41,3 +41,11 @@ class CartSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'status','items', 'total_price','created_at' ]
         read_only_fields = ['status','total_price','created_at']
+
+# Checkout flow serializer
+# Add to orders/serializers.py
+class CheckoutSerializer(serializers.Serializer):
+    shipping_address = serializers.CharField(required=True)
+    shipping_city = serializers.CharField(required=True)
+    shipping_postal_code = serializers.CharField(required=True)
+    shipping_country = serializers.CharField(default='Morocco')
