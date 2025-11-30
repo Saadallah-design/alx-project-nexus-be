@@ -504,6 +504,85 @@ Authorization: Bearer <access-token>
 
 **Status Change:** Order status changes from `PENDING` → `PAID`
 
+**Status Change:** Order status changes from `PENDING` → `PAID`
+
+---
+
+### Guest Checkout (New)
+```http
+POST /api/cart/guest/checkout/
+```
+
+**Headers:**
+```
+Content-Type: application/json
+```
+*(No Authorization header required)*
+
+**Request Body:**
+```json
+{
+  "email": "guest@example.com",
+  "first_name": "Guest",
+  "last_name": "User",
+  "shipping_address": "123 Guest St",
+  "shipping_city": "Casablanca",
+  "shipping_postal_code": "20000"
+}
+```
+
+**Requirements:**
+- `email` is **REQUIRED** for guest checkout
+- Other fields follow same rules as regular checkout
+
+**Response (200 OK):**
+```json
+{
+  "message": "Order placed. Check your email for confirmation.",
+  "order_id": "order-uuid",
+  "total": 700.0,
+  "email": "guest@example.com"
+}
+```
+
+---
+
+### Guest Order Lookup
+```http
+POST /api/cart/guest/orders/lookup/
+```
+
+**Request Body:**
+```json
+{
+  "email": "guest@example.com",
+  "order_id": "order-uuid"
+}
+```
+
+**Response (200 OK):**
+Returns full order details (same as Get Order Details).
+
+---
+
+### Link Guest Orders
+```http
+POST /api/cart/link-guest-orders/
+```
+
+**Headers:**
+```
+Authorization: Bearer <access-token>
+```
+
+**Response (200 OK):**
+```json
+{
+  "message": "Linked 2 previous orders to your account",
+  "orders_linked": 2
+}
+```
+
 ---
 
 ## 👤 User Profile
@@ -641,16 +720,37 @@ async function getProducts() {
   return await response.json();
 }
 
-// Add to Cart
+// Add to Cart (Works for both Guest & Auth)
 async function addToCart(productId, quantity) {
   const token = localStorage.getItem('access_token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  
+  // Note: For guests, browser automatically handles cookies
   const response = await fetch('http://localhost:8000/api/cart/items/', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
+    headers: headers,
     body: JSON.stringify({ product_id: productId, quantity })
+  });
+  return await response.json();
+}
+
+// Guest Checkout
+async function guestCheckout(email, addressData) {
+  const response = await fetch('http://localhost:8000/api/cart/guest/checkout/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, ...addressData })
+  });
+  return await response.json();
+}
+
+// Link Guest Orders (Call after registration)
+async function linkGuestOrders() {
+  const token = localStorage.getItem('access_token');
+  const response = await fetch('http://localhost:8000/api/cart/link-guest-orders/', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` }
   });
   return await response.json();
 }
@@ -687,6 +787,14 @@ export const getProducts = () =>
 // Add to Cart
 export const addToCart = (product_id, quantity) => 
   api.post('/cart/items/', { product_id, quantity });
+
+// Guest Checkout
+export const guestCheckout = (email, addressData) =>
+  api.post('/cart/guest/checkout/', { email, ...addressData });
+
+// Link Guest Orders
+export const linkGuestOrders = () =>
+  api.post('/cart/link-guest-orders/');
 ```
 
 ---
@@ -718,6 +826,13 @@ export const addToCart = (product_id, quantity) =>
 
 ## 📋 Changelog
 
+### Version 1.2 (November 30, 2025)
+**Guest Checkout (Hybrid)**
+- ✅ Added guest checkout endpoint (`POST /api/cart/guest/checkout/`)
+- ✅ Added guest order lookup (`POST /api/cart/guest/orders/lookup/`)
+- ✅ Added account linking (`POST /api/cart/link-guest-orders/`)
+- ✅ Updated cart endpoints to support session-based guest carts
+
 ### Version 1.1 (November 30, 2025)
 **Enhanced Checkout & Order History**
 - ✅ Added 6 optional fields to checkout (first_name, last_name, phone_number, email, shipping_address_line_2, shipping_state)
@@ -735,4 +850,4 @@ export const addToCart = (product_id, quantity) =>
 
 ---
 
-**Last Updated:** November 30, 2025 - Version 1.1
+**Last Updated:** November 30, 2025 - Version 1.2
