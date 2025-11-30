@@ -5,6 +5,7 @@ from .serializers import (CartSerializer, OrderItemSerializer, CheckoutSerialize
                           OrderDetailSerializer, GuestCheckoutSerializer, GuestOrderLookupSerializer)
 from rest_framework.response import Response
 from django.utils import timezone # for the payment view
+from .tasks import send_order_confirmation_email  # Celery task
 
 
 # Cart Retrieve View
@@ -161,7 +162,8 @@ class CheckoutView(generics.GenericAPIView):
         cart.first_name = serializer.validated_data.get('first_name', '')
         cart.last_name = serializer.validated_data.get('last_name', '')
         cart.phone_number = serializer.validated_data.get('phone_number', '')
-        cart.email = serializer.validated_data.get('email', '')
+        # Use provided email or fall back to user's email
+        cart.email = serializer.validated_data.get('email', '') or request.user.email
         
         # Save address information
         cart.shipping_address = serializer.validated_data.get('shipping_address', '')
@@ -175,7 +177,12 @@ class CheckoutView(generics.GenericAPIView):
         cart.status = 'PENDING'
         cart.save()
         
-        # 5. Return order for payment
+        # 5. Queue order confirmation email (async)
+        email_to_use = cart.email or request.user.email
+        if email_to_use:
+            send_order_confirmation_email.delay(str(cart.id))
+        
+        # 6. Return order for payment
         return Response({
             "message": "Order placed. Proceed to payment.",
             "order_id": str(cart.id),
@@ -298,12 +305,18 @@ class GuestCheckoutView(generics.GenericAPIView):
         for field, value in serializer.validated_data.items():
             setattr(cart, field, value)
         
-        # Save guest email if provided (optional)
-        cart.guest_email = serializer.validated_data.get('email', '')
+        # Ensure guest_email is set from email field for guest orders
+        email_value = serializer.validated_data.get('email', '')
+        cart.guest_email = email_value
+        # Also set the main email field for consistency
+        cart.email = email_value
         cart.status = 'PENDING'
         cart.save()
         
-        # TODO: Send order confirmation email if email provided
+        # Queue order confirmation email if email provided (async)
+        email_to_use = cart.email or cart.guest_email
+        if email_to_use:
+            send_order_confirmation_email.delay(str(cart.id))
         
         return Response({
             "message": "Order placed successfully.",
