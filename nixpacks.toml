@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["python3", "postgresql_16.dev", "gcc"]
-
-[phases.install]
-cmds = ["python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
-
-[start]
-cmd = "cd ecommerce_backend && python manage.py migrate && python manage.py create_superuser_from_env && gunicorn ecommerce_backend.wsgi --log-file -"
