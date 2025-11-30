@@ -54,11 +54,56 @@ class Product(models.Model):
     #  in order to make it data driven
     is_top_rated = models.BooleanField(default=False)
     is_best_seller = models.BooleanField(default=False)
-    
+
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
         ordering = ["-created_at"]
+        
+        # meta class for query optimization starting with product model
+        indexes = [
+            # Index 1: Category + Availability (since it is most common product listing query)
+            # Used for: filtering products by category and showing only available ones
+            models.Index(
+                fields=['category', 'is_available'],
+                name='product_cat_avail_idx'
+            ),
+            
+            # Index 2: Availability + Created Date (filtering + default sorting)
+            # Used for: showing available products sorted by newest first
+            models.Index(
+                fields=['is_available', '-created_at'],
+                name='product_avail_date_idx'
+            ),
+            
+            # Index 3: Featured products filter
+            # Used for: homepage featured products section
+            models.Index(
+                fields=['is_featured', 'is_available'],
+                name='product_featured_idx'
+            ),
+            
+            # Index 4: Best sellers filter
+            # Used for: best sellers product section
+            models.Index(
+                fields=['is_best_seller', 'is_available'],
+                name='product_bestseller_idx'
+            ),
+            
+            # Index 5: New products with date sorting
+            # Used for: new arrivals section sorted by date
+            models.Index(
+                fields=['is_new', '-created_at'],
+                name='product_new_idx'
+            ),
+            
+            # Index 6: Top rated products
+            # Used for: top rated products section
+            models.Index(
+                fields=['is_top_rated', 'is_available'],
+                name='product_toprated_idx'
+            ),
+        ]
         
     def __str__(self):
         return self.name
