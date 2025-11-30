@@ -15,19 +15,28 @@ class CartRetrieveView(generics.RetrieveAPIView):
 
     def get_object(self):
         if self.request.user.is_authenticated:
-            # Authenticated user - existing logic
-            cart, created = Order.objects.get_or_create(
+            # Optimized: uses order_user_status_idx index
+            cart, created = Order.objects.select_related(
+                'user'
+            ).prefetch_related(
+                'items__product__category',
+                'items__product__images'
+            ).get_or_create(
                 user=self.request.user,
                 status='CART'
             )
         else:
+            # Optimized: uses order_guest_cart_idx index
             # Guest user - session-based cart
             session_key = self.request.session.session_key
             if not session_key:
                 self.request.session.create()
                 session_key = self.request.session.session_key
             
-            cart, created = Order.objects.get_or_create(
+            cart, created = Order.objects.prefetch_related(
+                'items__product__category',
+                'items__product__images'
+            ).get_or_create(
                 session_key=session_key,
                 status='CART',
                 is_guest=True
@@ -42,18 +51,24 @@ class OrderItemManageView(generics.ListCreateAPIView):
     permission_classes = [AllowAny]  # Allow guests
 
     def get_queryset(self):
-        # Get cart for authenticated or guest user
+        # Optimized: get cart with prefetched items
         cart = self._get_or_create_cart()
-        return OrderItem.objects.filter(order=cart)
+        return OrderItem.objects.select_related(
+            'product__category'
+        ).prefetch_related(
+            'product__images'
+        ).filter(order=cart)
     
     def _get_or_create_cart(self):
-        """Helper to get cart for authenticated or guest user"""
+        """Helper to get cart for authenticated or guest user (optimized)"""
         if self.request.user.is_authenticated:
+            # Uses order_user_status_idx
             cart, _ = Order.objects.get_or_create(
                 user=self.request.user,
                 status='CART'
             )
         else:
+            # Uses order_guest_cart_idx
             session_key = self.request.session.session_key
             if not session_key:
                 self.request.session.create()
@@ -204,26 +219,40 @@ class MockPaymentView(generics.GenericAPIView):
 # Order History Views
 
 class OrderListView(generics.ListAPIView):
-    """List all orders for the authenticated user (excluding CART status)"""
+    """List all orders for the authenticated user (excluding CART status) - Optimized"""
     permission_classes = [IsAuthenticated]
     serializer_class = OrderDetailSerializer
     
     def get_queryset(self):
-        # Exclude cart, only show actual orders
-        return Order.objects.filter(
+        # Optimized: uses order_user_status_idx and prefetch related data
+        return Order.objects.select_related(
+            'user'
+        ).prefetch_related(
+            'items__product__category',
+            'items__product__images'
+        ).filter(
             user=self.request.user
-        ).exclude(status='CART').order_by('-created_at')
+        ).exclude(
+            status='CART'
+        ).order_by('-created_at')  # Uses order_user_status_idx
 
 
 class OrderDetailView(generics.RetrieveAPIView):
-    """Get details of a specific order"""
+    """Get details of a specific order - Optimized"""
     permission_classes = [IsAuthenticated]
     serializer_class = OrderDetailSerializer
     lookup_field = 'id'
     
     def get_queryset(self):
-        # User can only view their own orders
-        return Order.objects.filter(user=self.request.user).exclude(status='CART')
+        # Optimized: prefetch all related data
+        return Order.objects.select_related(
+            'user'
+        ).prefetch_related(
+            'items__product__category',
+            'items__product__images'
+        ).filter(
+            user=self.request.user
+        ).exclude(status='CART')
 
 
 # Guest Checkout Views

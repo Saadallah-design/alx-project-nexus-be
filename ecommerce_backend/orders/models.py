@@ -74,6 +74,44 @@ class Order(models.Model):
     payment_intent_id = models.CharField(max_length=255, blank=True)
     paid_at = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        indexes = [
+            # Index 1: User cart/orders with status (most common query)
+            # Used for: getting user's active cart and order history
+            models.Index(
+                fields=['user', 'status', '-created_at'],
+                name='order_user_status_idx'
+            ),
+            
+            # Index 2: Guest cart lookup by session
+            # Used for: retrieving guest shopping cart
+            models.Index(
+                fields=['session_key', 'status', 'is_guest'],
+                name='order_guest_cart_idx'
+            ),
+            
+            # Index 3: Guest orders by email
+            # Used for: guest order lookup and history
+            models.Index(
+                fields=['guest_email', 'is_guest'],
+                name='order_guest_email_idx'
+            ),
+            
+            # Index 4: Order status with date sorting
+            # Used for: filtering orders by status (admin view)
+            models.Index(
+                fields=['status', '-created_at'],
+                name='order_status_date_idx'
+            ),
+            
+            # Index 5: Paid orders (partial index would be ideal)
+            # Used for: retrieving completed orders
+            models.Index(
+                fields=['status', 'paid_at'],
+                name='order_paid_idx'
+            ),
+        ]
+
 
 # ---- OrderItem Model ----
 class OrderItem(models.Model):
