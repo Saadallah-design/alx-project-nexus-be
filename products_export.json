@@ -1,0 +1,654 @@
+[
+{
+  "model": "catalog.product",
+  "pk": "038a9db4-5eda-4f8f-86e3-762a66366dfb",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Swaravoski Green",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "1200.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:52:38.176Z",
+    "updated_at": "2025-11-30T16:52:38.176Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "058f6c5c-b60f-470a-bdd5-8d99f92e64d3",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Golden Heirloom",
+    "description": "A majestic statement of opulence and heritage, Crimson Majesty wraps the wearer in a story woven from gold and fire. The deep black base is boldly adorned with red and golden motifs, recalling the imperial art of Moroccan weaving. Designed for the woman who commands presence without raising her voice.",
+    "image": "",
+    "base_price": "700.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:50:24.789Z",
+    "updated_at": "2025-11-30T17:21:46.346Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "156a46a2-425a-4465-8258-191c20cf9971",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Grey Moroccan Caftan",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "800.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:51:29.121Z",
+    "updated_at": "2025-11-30T17:18:30.701Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "1e323199-a208-4940-a38b-4b0b937f30c9",
+  "fields": {
+    "category": "d03b7460-a086-4bc0-aeb9-baac90e70d4e",
+    "name": "Jellaba Golden Dusk",
+    "description": "Jellaba Golden Dusk is a masterpiece of subtle grandeur. Crafted in textured jacquard with refined tonal embroidery, this djellaba evokes the richness of Moroccan craftsmanship through its intricate geometric detailing and luxurious finish. The warm golden hue flatters every complexion and adds a serene, noble aura—perfect for refined Ramadan evenings or elegant daytime occasions. A timeless piece for the woman who moves with quiet strength and grace.",
+    "image": "product_images/djellaba_black_noir.jpg",
+    "base_price": "500.00",
+    "discount_percentage": "1.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-28T19:09:43.048Z",
+    "updated_at": "2025-11-29T10:04:56.877Z",
+    "is_featured": true,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "2fe8a9bc-5742-4f84-b50c-5f72d073d7e1",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Kimono Whispers",
+    "description": "A tapestry of passion and mystery,  blends the depth of night with the intensity of red silk. Draped in intricate Moroccan embroidery, this kimono is a celebration of feminine strength and timeless grace. With every step, it speaks in patterns—an echo of ancestral hands, reimagined for today’s",
+    "image": "product_images/kimono01_MuiJMR4.jpg",
+    "base_price": "600.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:47:38.285Z",
+    "updated_at": "2025-11-30T17:21:13.942Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "327207da-1122-41b0-90b0-1ef74e5641b4",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Imperial Noir",
+    "description": "A majestic statement of opulence and heritage, Crimson Majesty wraps the wearer in a story woven from gold and fire. The deep black base is boldly adorned with red and golden motifs, recalling the imperial art of Moroccan weaving. Designed for the woman who commands presence without raising her voice.",
+    "image": "",
+    "base_price": "600.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:49:27.012Z",
+    "updated_at": "2025-11-30T17:20:55.028Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "3865158a-fc85-43b5-a136-d59684138be3",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Mint Radiance",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "850.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:56:07.611Z",
+    "updated_at": "2025-11-30T17:19:03.698Z",
+    "is_featured": true,
+    "is_new": false,
+    "is_top_rated": true,
+    "is_best_seller": true
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "5d9f554b-2da9-4f5f-8bc5-74104d538a54",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Moroccan Silk Caftan",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "900.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:52:00.249Z",
+    "updated_at": "2025-11-30T17:19:56.998Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "716a4645-7271-4086-8797-6a49702d16b0",
+  "fields": {
+    "category": "d03b7460-a086-4bc0-aeb9-baac90e70d4e",
+    "name": "Jellaba Noir Nomade",
+    "description": "evokes the essence of modern Moroccan elegance. Crafted in deep black with vibrant geometric embroidery in vivid purples, reds, and golds, it reflects both cultural heritage and contemporary edge. The lime-toned neckline and sleeve lining bring a fresh contrast, while the flowing silhouette offers effortless sophistication. A powerful piece for the woman who carries tradition with daring grace.",
+    "image": "product_images/djellaba_marocaine_femme.jpg",
+    "base_price": "599.98",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-28T19:10:13.685Z",
+    "updated_at": "2025-11-29T10:05:06.429Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "74cf4710-7966-465c-b1a9-e871e064d571",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Lace of Light",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "900.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:53:02.977Z",
+    "updated_at": "2025-11-30T17:19:45.258Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "7b5df327-0c27-4b53-bf45-8297491790f4",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Verdant Eclipse",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "900.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:55:38.892Z",
+    "updated_at": "2025-11-30T17:19:18.043Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "8039f64a-7dd8-4467-a20c-2984b49e23cb",
+  "fields": {
+    "category": "d03b7460-a086-4bc0-aeb9-baac90e70d4e",
+    "name": "Jellaba Test",
+    "description": "",
+    "image": "",
+    "base_price": "299.99",
+    "discount_percentage": "0.00",
+    "stock_quantity": 10,
+    "is_available": true,
+    "created_at": "2025-11-29T04:34:48.344Z",
+    "updated_at": "2025-11-29T10:05:29.974Z",
+    "is_featured": true,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "8ccc7eed-a15a-42d1-be3b-380a8bf1ff48",
+  "fields": {
+    "category": "d03b7460-a086-4bc0-aeb9-baac90e70d4e",
+    "name": "Jellaba Rose Eclat",
+    "description": "captivates with its vibrant pink and white textured weave, evoking the elegance of blooming petals at dawn. Delicate green and magenta accents highlight its refined silhouette, while the soft, flowing fabric ensures comfort and grace. Designed for the woman who embraces sophistication with a touch of boldness, this djellaba is the perfect blend of tradition and contemporary luxury.",
+    "image": "product_images/djellaba_femme_dor.jpg",
+    "base_price": "699.99",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-28T19:10:40.445Z",
+    "updated_at": "2025-11-29T10:05:20.699Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "8f4f2428-3170-4dd1-b72a-d04996b4638d",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Moonlight Mirage",
+    "description": "A majestic statement of opulence and heritage, Crimson Majesty wraps the wearer in a story woven from gold and fire. The deep black base is boldly adorned with red and golden motifs, recalling the imperial art of Moroccan weaving. Designed for the woman who commands presence without raising her voice.",
+    "image": "",
+    "base_price": "600.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:49:58.322Z",
+    "updated_at": "2025-11-30T17:20:38.656Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "b65f673d-bb4e-40d7-b93c-f443895b57fb",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Crimson Majesty",
+    "description": "A majestic statement of opulence and heritage, Crimson Majesty wraps the wearer in a story woven from gold and fire. The deep black base is boldly adorned with red and golden motifs, recalling the imperial art of Moroccan weaving. Designed for the woman who commands presence without raising her voice.",
+    "image": "",
+    "base_price": "460.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:48:28.612Z",
+    "updated_at": "2025-11-30T17:18:09.618Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "ba37863c-42fe-478e-b395-8ddb2f128970",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Celestial Cascade",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "900.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:56:31.729Z",
+    "updated_at": "2025-11-30T17:17:54.574Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "be6d475c-0bb9-4a5b-a1d8-eceb5e15ecf3",
+  "fields": {
+    "category": "4939aa83-e121-4d2f-b03c-6013fb8e6742",
+    "name": "Veste en Brochet avec Sfifa Merema",
+    "description": "Cette veste en brochet faite à la main est sublimée par des détails de sfifa merema, apportant une touche d'élégance et de raffinement. Le tissu brochet, riche et texturé, confère à cette pièce une allure luxueuse et sophistiquée.",
+    "image": "product_images/caftan433.jpg",
+    "base_price": "350.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-26T12:23:01.704Z",
+    "updated_at": "2025-11-30T17:16:35.772Z",
+    "is_featured": true,
+    "is_new": true,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "c54d1219-329e-42c1-8519-0d593f965421",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Moonlight Reverie",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "1400.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:57:29.697Z",
+    "updated_at": "2025-11-30T16:57:29.697Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "fbbfc82e-e550-442c-9ce8-56d751549a6f",
+  "fields": {
+    "category": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+    "name": "Light Green",
+    "description": "Every detail bears the hand of a master artisan: embroidery drawn like lace, sequins that catch the faintest light, crystals that whisper of refinement. The flowing lines embrace the body with effortless grace, while the sculpted belt brings poise and balance. Wide sleeves fall like silk poetry, echoing Morocco’s heritage of royal attire.",
+    "image": "",
+    "base_price": "900.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:53:47.779Z",
+    "updated_at": "2025-11-30T17:19:33.629Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": "fcbc3798-d990-4e62-8382-7fa0caa9340f",
+  "fields": {
+    "category": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+    "name": "Gold Mist Heirloom",
+    "description": "A majestic statement of opulence and heritage, Crimson Majesty wraps the wearer in a story woven from gold and fire. The deep black base is boldly adorned with red and golden motifs, recalling the imperial art of Moroccan weaving. Designed for the woman who commands presence without raising her voice.",
+    "image": "",
+    "base_price": "430.00",
+    "discount_percentage": "0.00",
+    "stock_quantity": 0,
+    "is_available": true,
+    "created_at": "2025-11-30T16:48:53.684Z",
+    "updated_at": "2025-11-30T17:21:36.019Z",
+    "is_featured": false,
+    "is_new": false,
+    "is_top_rated": false,
+    "is_best_seller": false
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 1,
+  "fields": {
+    "product": "8039f64a-7dd8-4467-a20c-2984b49e23cb",
+    "image": "product_images/djellaba_noir_HzY5zki.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-29T09:49:24.527Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 2,
+  "fields": {
+    "product": "1e323199-a208-4940-a38b-4b0b937f30c9",
+    "image": "product_images/djellaba_femme_dor_8DpY5QD.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-29T09:49:51.209Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 3,
+  "fields": {
+    "product": "8ccc7eed-a15a-42d1-be3b-380a8bf1ff48",
+    "image": "product_images/djellaba_marocaine_femme_XpnWbnS.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-29T09:49:59.034Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 4,
+  "fields": {
+    "product": "8039f64a-7dd8-4467-a20c-2984b49e23cb",
+    "image": "product_images/djellaba_marocaine_femme_eALfHuU.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": false,
+    "created_at": "2025-11-29T09:50:06.990Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 5,
+  "fields": {
+    "product": "716a4645-7271-4086-8797-6a49702d16b0",
+    "image": "product_images/djellaba_black_noir_qSV3ucF.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-29T10:05:06.432Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 6,
+  "fields": {
+    "product": "be6d475c-0bb9-4a5b-a1d8-eceb5e15ecf3",
+    "image": "product_images/caftan433_oA16xNj_SNFHXNE.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-29T10:05:38.527Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 7,
+  "fields": {
+    "product": "2fe8a9bc-5742-4f84-b50c-5f72d073d7e1",
+    "image": "product_images/kaftan01_gEFxaNx.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:47:38.300Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 8,
+  "fields": {
+    "product": "b65f673d-bb4e-40d7-b93c-f443895b57fb",
+    "image": "product_images/kimono02_XHPeO92.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:48:28.619Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 9,
+  "fields": {
+    "product": "fcbc3798-d990-4e62-8382-7fa0caa9340f",
+    "image": "product_images/kaftan03_eTuzEtx.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:48:53.688Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 10,
+  "fields": {
+    "product": "327207da-1122-41b0-90b0-1ef74e5641b4",
+    "image": "product_images/kimono08_KuAM7Yi.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:49:27.017Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 11,
+  "fields": {
+    "product": "8f4f2428-3170-4dd1-b72a-d04996b4638d",
+    "image": "product_images/kimono10_DTn2QrG.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:49:58.332Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 12,
+  "fields": {
+    "product": "058f6c5c-b60f-470a-bdd5-8d99f92e64d3",
+    "image": "product_images/kaftan06_KRrMMrr.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:50:24.794Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 13,
+  "fields": {
+    "product": "156a46a2-425a-4465-8258-191c20cf9971",
+    "image": "product_images/kaftan01_OsX8vXE.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:51:29.125Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 14,
+  "fields": {
+    "product": "5d9f554b-2da9-4f5f-8bc5-74104d538a54",
+    "image": "product_images/kaftan02_KwUdIKx.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:52:00.253Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 15,
+  "fields": {
+    "product": "038a9db4-5eda-4f8f-86e3-762a66366dfb",
+    "image": "product_images/kaftan04_X1RcNeY.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:52:38.180Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 16,
+  "fields": {
+    "product": "74cf4710-7966-465c-b1a9-e871e064d571",
+    "image": "product_images/kaftan03_0Y62bb4.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:53:02.980Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 17,
+  "fields": {
+    "product": "fbbfc82e-e550-442c-9ce8-56d751549a6f",
+    "image": "product_images/kaftan07_6HxhDFT.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:53:47.784Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 18,
+  "fields": {
+    "product": "7b5df327-0c27-4b53-bf45-8297491790f4",
+    "image": "product_images/kaftan08_DFzsgx9.jpeg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:55:38.897Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 19,
+  "fields": {
+    "product": "3865158a-fc85-43b5-a136-d59684138be3",
+    "image": "product_images/kaftan07_iojKO3D.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:56:07.620Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 20,
+  "fields": {
+    "product": "ba37863c-42fe-478e-b395-8ddb2f128970",
+    "image": "product_images/kaftan01_x8W4mWA.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:56:31.733Z"
+  }
+},
+{
+  "model": "catalog.productimage",
+  "pk": 21,
+  "fields": {
+    "product": "c54d1219-329e-42c1-8519-0d593f965421",
+    "image": "product_images/kaftan02_iOuQTz1_B8gedex.jpg",
+    "alt_text": "",
+    "order": 0,
+    "is_primary": true,
+    "created_at": "2025-11-30T16:57:29.701Z"
+  }
+}
+]
