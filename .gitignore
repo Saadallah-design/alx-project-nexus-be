@@ -19,6 +19,8 @@ db.sqlite3
 db.sqlite3-journal
 /media
 /staticfiles
+staticfiles/
+ecommerce_backend/staticfiles/
 
 # Environment Variables
 .env
