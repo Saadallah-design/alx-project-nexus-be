@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
+from .pagination import ProductPagination
 
 # using pre-defined views from rest_framework
 
@@ -13,6 +14,7 @@ class CategoryListView(generics.ListAPIView):
 class ProductListCreateView(generics.ListCreateAPIView):
     """API endpoint to list and create products."""
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
 
     def get_queryset(self):
         """
