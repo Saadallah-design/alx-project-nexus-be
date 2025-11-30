@@ -1,63 +1,85 @@
 from rest_framework import generics, serializers, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Order, OrderItem
-from .serializers import CartSerializer, OrderItemSerializer, CheckoutSerializer, OrderDetailSerializer
+from .serializers import (CartSerializer, OrderItemSerializer, CheckoutSerializer, 
+                          OrderDetailSerializer, GuestCheckoutSerializer, GuestOrderLookupSerializer)
 from rest_framework.response import Response
 from django.utils import timezone # for the payment view
 
 
 # Cart Retrieve View
 class CartRetrieveView(generics.RetrieveAPIView):
-    """API endpoint for retrieving the current user's active cart."""
+    """API endpoint for retrieving the current user's active cart (supports guests)."""
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]  # Allow guests
 
     def get_object(self):
-        # checking first if the user has an active cart
-        user = self.request.user
-        # tries to find an active cart for the user with status 'CART'
-        # if it doesn't exist, it creates one
-        cart, created = Order.objects.get_or_create(
-            user=user,
-            status='CART'
-        )
+        if self.request.user.is_authenticated:
+            # Authenticated user - existing logic
+            cart, created = Order.objects.get_or_create(
+                user=self.request.user,
+                status='CART'
+            )
+        else:
+            # Guest user - session-based cart
+            session_key = self.request.session.session_key
+            if not session_key:
+                self.request.session.create()
+                session_key = self.request.session.session_key
+            
+            cart, created = Order.objects.get_or_create(
+                session_key=session_key,
+                status='CART',
+                is_guest=True
+            )
         return cart
 
 
 # the order item manage view handles add to cart logic, and update quantity logic and locking price
 class OrderItemManageView(generics.ListCreateAPIView):
-    """API endpoint for managing order items in the cart."""
+    """API endpoint for managing order items in the cart (supports guests)."""
     serializer_class = OrderItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]  # Allow guests
 
     def get_queryset(self):
-        # Security: Only allow managing items in the user's own active cart
-        cart, _ = Order.objects.get_or_create(
-            user=self.request.user,
-            status='CART'
-        )
-        # return all the items in the cart
+        # Get cart for authenticated or guest user
+        cart = self._get_or_create_cart()
         return OrderItem.objects.filter(order=cart)
+    
+    def _get_or_create_cart(self):
+        """Helper to get cart for authenticated or guest user"""
+        if self.request.user.is_authenticated:
+            cart, _ = Order.objects.get_or_create(
+                user=self.request.user,
+                status='CART'
+            )
+        else:
+            session_key = self.request.session.session_key
+            if not session_key:
+                self.request.session.create()
+                session_key = self.request.session.session_key
+            
+            cart, _ = Order.objects.get_or_create(
+                session_key=session_key,
+                status='CART',
+                is_guest=True
+            )
+        return cart
 
     def perform_create(self, serializer):
-        # security check
-        user = self.request.user
         quantity = serializer.validated_data.get('quantity', 1)
-        product = serializer.context['product'] # prefetched product obj since I stored it in the context
+        product = serializer.context['product']
 
-        # step 1: get or create the user's active cart
-        cart, _ = Order.objects.get_or_create(user = user,status='CART')
+        # Get cart for authenticated or guest user
+        cart = self._get_or_create_cart()
 
-        # step 2: check if the product is already in the cart
-        
+        # Check if product already in cart
         try:
             order_item = OrderItem.objects.get(order=cart, product=product)
-            order_item.quantity += quantity # if it exist update
-            order_item.save() # then save
+            order_item.quantity += quantity
+            order_item.save()
             serializer.instance = order_item
-
         except OrderItem.DoesNotExist:
-            # if not exist create it
             serializer.save(order=cart, product=product, price=product.sale_price)
 
 
@@ -202,3 +224,112 @@ class OrderDetailView(generics.RetrieveAPIView):
     def get_queryset(self):
         # User can only view their own orders
         return Order.objects.filter(user=self.request.user).exclude(status='CART')
+
+
+# Guest Checkout Views
+
+class GuestCheckoutView(generics.GenericAPIView):
+    """Guest checkout - creates order without user account"""
+    permission_classes = [AllowAny]
+    serializer_class = GuestCheckoutSerializer
+    
+    def post(self, request):
+        # Get guest cart from session
+        session_key = request.session.session_key
+        if not session_key:
+            return Response(
+                {"error": "No cart found"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            cart = Order.objects.get(
+                session_key=session_key,
+                status='CART',
+                is_guest=True
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "No active cart found"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate cart has items
+        if not cart.items.exists():
+            return Response(
+                {"error": "Cart is empty"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Save shipping info and email
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Save all fields (including email)
+        for field, value in serializer.validated_data.items():
+            setattr(cart, field, value)
+        
+        cart.guest_email = serializer.validated_data['email']
+        cart.status = 'PENDING'
+        cart.save()
+        
+        # TODO: Send order confirmation email
+        
+        return Response({
+            "message": "Order placed. Check your email for confirmation.",
+            "order_id": str(cart.id),
+            "total": float(cart.total_price),
+            "email": cart.guest_email
+        })
+
+
+class GuestOrderLookupView(generics.GenericAPIView):
+    """Allow guests to view their order by email + order ID"""
+    permission_classes = [AllowAny]
+    serializer_class = GuestOrderLookupSerializer
+    
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        try:
+            order = Order.objects.get(
+                id=serializer.validated_data['order_id'],
+                guest_email=serializer.validated_data['email'],
+                is_guest=True
+            )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Return order details
+        order_serializer = OrderDetailSerializer(order, context={'request': request})
+        return Response(order_serializer.data)
+
+
+class LinkGuestOrdersView(generics.GenericAPIView):
+    """Link guest orders to newly created account"""
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        user = request.user
+        
+        # Find guest orders with same email
+        guest_orders = Order.objects.filter(
+            is_guest=True,
+            guest_email=user.email,
+            user__isnull=True
+        )
+        
+        # Link orders to user
+        count = guest_orders.update(
+            user=user,
+            is_guest=False
+        )
+        
+        return Response({
+            "message": f"Linked {count} previous orders to your account",
+            "orders_linked": count
+        })

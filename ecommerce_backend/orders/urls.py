@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     CartRetrieveView, OrderItemManageView, OrderItemDetailView, 
-    CheckoutView, MockPaymentView, OrderListView, OrderDetailView
+    CheckoutView, MockPaymentView, OrderListView, OrderDetailView,
+    GuestCheckoutView, GuestOrderLookupView, LinkGuestOrdersView
 )
 
 app_name = 'orders'
@@ -14,5 +15,10 @@ urlpatterns = [
     path('orders/<uuid:order_id>/pay/', MockPaymentView.as_view(), name='mock-payment'),
     path('orders/', OrderListView.as_view(), name='order-list'),
     path('orders/<uuid:id>/', OrderDetailView.as_view(), name='order-detail'),
+    
+    # Guest Checkout
+    path('guest/checkout/', GuestCheckoutView.as_view(), name='guest-checkout'),
+    path('guest/orders/lookup/', GuestOrderLookupView.as_view(), name='guest-order-lookup'),
+    path('link-guest-orders/', LinkGuestOrdersView.as_view(), name='link-guest-orders'),
 
 ]

@@ -45,16 +45,16 @@ class CartSerializer(serializers.ModelSerializer):
 # Checkout flow serializer
 class CheckoutSerializer(serializers.Serializer):
     # Contact Information
-    first_name = serializers.CharField(required=False, allow_blank=True)
-    last_name = serializers.CharField(required=False, allow_blank=True)
-    phone_number = serializers.CharField(required=False, allow_blank=True)
-    email = serializers.EmailField(required=False, allow_blank=True)
+    first_name = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    last_name = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    phone_number = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    email = serializers.EmailField(required=False, allow_blank=True, allow_null=True)
     
     # Address Information
     shipping_address = serializers.CharField(required=True)
-    shipping_address_line_2 = serializers.CharField(required=False, allow_blank=True)
+    shipping_address_line_2 = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     shipping_city = serializers.CharField(required=True)
-    shipping_state = serializers.CharField(required=False, allow_blank=True)
+    shipping_state = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     shipping_postal_code = serializers.CharField(required=True)
     shipping_country = serializers.CharField(default='Morocco')
 
@@ -76,3 +76,22 @@ class OrderDetailSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'total_price', 'created_at', 'updated_at']
+
+
+# Guest Checkout Serializer
+class GuestCheckoutSerializer(CheckoutSerializer):
+    """Guest checkout requires email"""
+    email = serializers.EmailField(required=True)  # Override to make required
+    
+    def validate_email(self, value):
+        # Basic email validation
+        if not value or '@' not in value:
+            raise serializers.ValidationError("Valid email is required for guest checkout")
+        return value.lower()
+
+
+# Guest Order Lookup Serializer
+class GuestOrderLookupSerializer(serializers.Serializer):
+    """Lookup guest order by email and order ID"""
+    email = serializers.EmailField(required=True)
+    order_id = serializers.UUIDField(required=True)

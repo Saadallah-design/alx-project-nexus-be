@@ -17,7 +17,19 @@ class Order(models.Model):
 
     # using customUserModel defined in settings.py (users.CustomUser) |
     #  (retrieved via settings.AUTH_USER_MODEL)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
+    # Nullable for guest orders
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='orders',
+        null=True,
+        blank=True
+    )
+    
+    # Guest order fields
+    is_guest = models.BooleanField(default=False)
+    guest_email = models.EmailField(blank=True)
+    session_key = models.CharField(max_length=40, blank=True, help_text="Session key for guest cart tracking")
 
     # setting up the order model for the checkout flow
     # Contact Information
