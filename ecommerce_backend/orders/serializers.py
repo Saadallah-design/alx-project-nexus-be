@@ -10,12 +10,33 @@ class OrderItemSerializer(serializers.ModelSerializer):
     # product_id is write_only because it is not needed in the response
     product_id = serializers.UUIDField(write_only=True)
     product_name = serializers.CharField(source='product.name', read_only=True)
+    product_image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = OrderItem
         # "order" field is ommited from the serializer 
-        fields = ['id', 'product_id', 'product_name', 'quantity', 'price', 'extended_price']
+        fields = ['id', 'product_id', 'product_name', 'product_image', 'quantity', 'price', 'extended_price']
         read_only_fields = ['price', 'extended_price']
+
+    def get_product_image(self, obj):
+        """Get the product image URL"""
+        if obj.product:
+            # Check if product has ProductImage instances
+            primary_image = obj.product.images.filter(is_primary=True).first()
+            if primary_image and primary_image.image:
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(primary_image.image.url)
+                return primary_image.image.url
+            
+            # Fallback to the old image field if no ProductImage exists
+            if obj.product.image:
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(obj.product.image.url)
+                return obj.product.image.url
+        
+        return None
 
         # now this orderItemSerializer is used in the CartSerializer. 
         # it needs a validation method to ensure the product_id is valid
@@ -80,18 +101,22 @@ class OrderDetailSerializer(serializers.ModelSerializer):
 
 # Guest Checkout Serializer
 class GuestCheckoutSerializer(CheckoutSerializer):
-    """Guest checkout requires email"""
-    email = serializers.EmailField(required=True)  # Override to make required
+    """Guest checkout with optional email"""
+    email = serializers.EmailField(required=False, allow_blank=True, allow_null=True)
     
     def validate_email(self, value):
-        # Basic email validation
-        if not value or '@' not in value:
-            raise serializers.ValidationError("Valid email is required for guest checkout")
+        # If no email provided, return early (allow guest checkout without email)
+        if not value:
+            return value
+        
+        # Only validate format if email is provided
+        if '@' not in value:
+            raise serializers.ValidationError("Please provide a valid email address")
         return value.lower()
 
 
 # Guest Order Lookup Serializer
 class GuestOrderLookupSerializer(serializers.Serializer):
-    """Lookup guest order by email and order ID"""
-    email = serializers.EmailField(required=True)
+    """Lookup guest order by order ID (email optional for additional verification)"""
     order_id = serializers.UUIDField(required=True)
+    email = serializers.EmailField(required=False, allow_blank=True, allow_null=True)

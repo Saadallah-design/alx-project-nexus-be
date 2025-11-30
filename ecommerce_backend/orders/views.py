@@ -265,26 +265,27 @@ class GuestCheckoutView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
-        # Save all fields (including email)
+        # Save all fields from validated data
         for field, value in serializer.validated_data.items():
             setattr(cart, field, value)
         
-        cart.guest_email = serializer.validated_data['email']
+        # Save guest email if provided (optional)
+        cart.guest_email = serializer.validated_data.get('email', '')
         cart.status = 'PENDING'
         cart.save()
         
-        # TODO: Send order confirmation email
+        # TODO: Send order confirmation email if email provided
         
         return Response({
-            "message": "Order placed. Check your email for confirmation.",
+            "message": "Order placed successfully.",
             "order_id": str(cart.id),
             "total": float(cart.total_price),
-            "email": cart.guest_email
+            "email": cart.guest_email if cart.guest_email else None
         })
 
 
 class GuestOrderLookupView(generics.GenericAPIView):
-    """Allow guests to view their order by email + order ID"""
+    """Allow guests to view their order by order ID (email optional for verification)"""
     permission_classes = [AllowAny]
     serializer_class = GuestOrderLookupSerializer
     
@@ -292,12 +293,21 @@ class GuestOrderLookupView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
+        order_id = serializer.validated_data['order_id']
+        email = serializer.validated_data.get('email')
+        
         try:
-            order = Order.objects.get(
-                id=serializer.validated_data['order_id'],
-                guest_email=serializer.validated_data['email'],
-                is_guest=True
-            )
+            # Build query filters
+            filters = {
+                'id': order_id,
+                'is_guest': True
+            }
+            
+            # Add email filter only if provided
+            if email:
+                filters['guest_email'] = email
+            
+            order = Order.objects.get(**filters)
         except Order.DoesNotExist:
             return Response(
                 {"error": "Order not found"}, 
