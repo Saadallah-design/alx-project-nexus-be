@@ -1,11 +1,6 @@
 [phases.setup]
-nixPkgs = ["python312", "postgresql"]
-
-[phases.install]
-cmds = ["python -m pip install --upgrade pip", "pip install -r requirements.txt"]
+nixPkgs = ["postgresql"]
 
 [phases.build]
 cmds = ["cd ecommerce_backend && python manage.py collectstatic --noinput"]
 
-[start]
-cmd = "echo 'Use Procfile for service commands'"
