@@ -37,6 +37,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_yasg',  # Swagger/OpenAPI documentation
     # users app fro built in
     # 'users',
     'users.apps.UsersConfig',
