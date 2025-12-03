@@ -191,14 +191,29 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ===========================
 # CLOUDINARY CONFIGURATION
 # ===========================
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-    'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-    'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-}
+import cloudinary
+
+# Support both CLOUDINARY_URL and individual credentials
+CLOUDINARY_URL = env('CLOUDINARY_URL', default='')
+
+if CLOUDINARY_URL:
+    # Parse CLOUDINARY_URL (format: cloudinary://API_KEY:API_SECRET@CLOUD_NAME)
+    cloudinary.config(cloudinary_url=CLOUDINARY_URL)
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': cloudinary.config().cloud_name,
+        'API_KEY': cloudinary.config().api_key,
+        'API_SECRET': cloudinary.config().api_secret,
+    }
+else:
+    # Fallback to individual environment variables
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+        'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+        'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
+    }
 
 # Use Cloudinary for media files if credentials are provided
-if CLOUDINARY_STORAGE['CLOUD_NAME']:
+if CLOUDINARY_STORAGE.get('CLOUD_NAME'):
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     # MEDIA_URL will be automatically set by Cloudinary
 else:
