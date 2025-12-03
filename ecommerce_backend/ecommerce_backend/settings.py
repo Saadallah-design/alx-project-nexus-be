@@ -277,7 +277,8 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # PRODUCTION SECURITY SETTINGS
 # ===========================
 
-if not DEBUG:
+# Only enable HTTPS redirect in production (when not running locally)
+if not DEBUG and 'railway.app' in ALLOWED_HOSTS[0] if ALLOWED_HOSTS else False:
     # HTTPS and security settings
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Trust Railway proxy
