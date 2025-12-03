@@ -192,6 +192,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # CLOUDINARY CONFIGURATION
 # ===========================
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Support both CLOUDINARY_URL and individual credentials
 CLOUDINARY_URL = env('CLOUDINARY_URL', default='')
@@ -199,25 +201,20 @@ CLOUDINARY_URL = env('CLOUDINARY_URL', default='')
 if CLOUDINARY_URL:
     # Parse CLOUDINARY_URL (format: cloudinary://API_KEY:API_SECRET@CLOUD_NAME)
     cloudinary.config(cloudinary_url=CLOUDINARY_URL)
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': cloudinary.config().cloud_name,
-        'API_KEY': cloudinary.config().api_key,
-        'API_SECRET': cloudinary.config().api_secret,
-    }
-    # Also set for django-cloudinary-storage
-    CLOUDINARY_CLOUD_NAME = cloudinary.config().cloud_name
-    CLOUDINARY_API_KEY = cloudinary.config().api_key
-    CLOUDINARY_API_SECRET = cloudinary.config().api_secret
 else:
     # Fallback to individual environment variables
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-        'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-        'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-    }
-    CLOUDINARY_CLOUD_NAME = env('CLOUDINARY_CLOUD_NAME', default='')
-    CLOUDINARY_API_KEY = env('CLOUDINARY_API_KEY', default='')
-    CLOUDINARY_API_SECRET = env('CLOUDINARY_API_SECRET', default='')
+    cloudinary.config(
+        cloud_name=env('CLOUDINARY_CLOUD_NAME', default=''),
+        api_key=env('CLOUDINARY_API_KEY', default=''),
+        api_secret=env('CLOUDINARY_API_SECRET', default='')
+    )
+
+# Store config for reference
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': cloudinary.config().cloud_name,
+    'API_KEY': cloudinary.config().api_key,
+    'API_SECRET': cloudinary.config().api_secret,
+}
 
 # Use Cloudinary for media files if credentials are provided
 if CLOUDINARY_STORAGE.get('CLOUD_NAME'):
