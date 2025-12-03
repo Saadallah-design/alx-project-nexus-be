@@ -23,10 +23,7 @@ services:
           name: ecommerce-db
           property: connectionString
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: ecommerce-redis
-          property: connectionString
+        sync: false
       - key: ALLOWED_HOSTS
         sync: false
       - key: EMAIL_HOST_USER
@@ -64,20 +61,12 @@ services:
           name: ecommerce-db
           property: connectionString
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: ecommerce-redis
-          property: connectionString
+        sync: false
 
 databases:
   # PostgreSQL Database
   - name: ecommerce-db
     databaseName: ecommerce_db
     user: ecommerce_user
-    plan: free
-    region: oregon
-
-  # Redis for Celery
-  - name: ecommerce-redis
     plan: free
     region: oregon
