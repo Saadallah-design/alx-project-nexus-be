@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',  # Swagger/OpenAPI documentation
+    'cloudinary_storage',  # Cloudinary for media files
+    'cloudinary',  # Cloudinary SDK
     # users app fro built in
     # 'users',
     'users.apps.UsersConfig',
@@ -186,6 +188,23 @@ CORS_ALLOW_CREDENTIALS = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ===========================
+# CLOUDINARY CONFIGURATION
+# ===========================
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+    'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
+}
+
+# Use Cloudinary for media files if credentials are provided
+if CLOUDINARY_STORAGE['CLOUD_NAME']:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    # MEDIA_URL will be automatically set by Cloudinary
+else:
+    # Fallback to local storage for development
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 
 # ===========================
 # EMAIL CONFIGURATION
@@ -234,7 +253,7 @@ else:
 # ===========================
 
 # Redis URL from Railway or local
-REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
+REDIS_URL = env('REDIS_URL', default='redis://default:********@sterling-ferret-29870.upstash.io:6379')
 
 # Celery Broker URL (Redis)
 CELERY_BROKER_URL = REDIS_URL

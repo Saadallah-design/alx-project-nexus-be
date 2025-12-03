@@ -26,6 +26,8 @@ services:
         sync: false
       - key: ALLOWED_HOSTS
         sync: false
+      - key: EMAIL_HOST
+        value: smtp.gmail.com
       - key: EMAIL_HOST_USER
         sync: false
       - key: EMAIL_HOST_PASSWORD
@@ -38,30 +40,37 @@ services:
         sync: false
       - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
-
-  # Celery Worker for Background Tasks
-  - type: worker
-    name: ecommerce-celery-worker
-    env: python
-    region: oregon
-    plan: free
-    branch: deploy/render
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "cd ecommerce_backend && celery -A ecommerce_backend worker --loglevel=info"
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.13.0
-      - key: SECRET_KEY
-        fromService:
-          type: web
-          name: ecommerce-backend
-          envVarKey: SECRET_KEY
-      - key: DATABASE_URL
-        fromDatabase:
-          name: ecommerce-db
-          property: connectionString
-      - key: REDIS_URL
+      - key: CLOUDINARY_CLOUD_NAME
         sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # Celery Worker for Background Tasks (Commented out - not supported on Render free tier)
+  # Uncomment when upgrading to a paid plan
+  # - type: worker
+  #   name: ecommerce-celery-worker
+  #   env: python
+  #   region: oregon
+  #   plan: starter  # Requires paid plan
+  #   branch: deploy/render
+  #   buildCommand: "pip install -r requirements.txt"
+  #   startCommand: "cd ecommerce_backend && celery -A ecommerce_backend worker --loglevel=info"
+  #   envVars:
+  #     - key: PYTHON_VERSION
+  #       value: 3.13.0
+  #     - key: SECRET_KEY
+  #       fromService:
+  #         type: web
+  #         name: ecommerce-backend
+  #         envVarKey: SECRET_KEY
+  #     - key: DATABASE_URL
+  #       fromDatabase:
+  #         name: ecommerce-db
+  #         property: connectionString
+  #     - key: REDIS_URL
+  #       sync: false
 
 databases:
   # PostgreSQL Database

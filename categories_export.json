@@ -1,0 +1,42 @@
+[
+{
+  "model": "catalog.category",
+  "pk": "4939aa83-e121-4d2f-b03c-6013fb8e6742",
+  "fields": {
+    "name": "Veste",
+    "slug": "veste"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": "5777444f-5c4d-47ff-a0b2-32cac4d8ceab",
+  "fields": {
+    "name": "Kimono",
+    "slug": "kimono"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": "5bf82402-42a8-46c3-baa5-699d409b95a5",
+  "fields": {
+    "name": "Kaftan",
+    "slug": "kaftan"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": "d03b7460-a086-4bc0-aeb9-baac90e70d4e",
+  "fields": {
+    "name": "Jellaba",
+    "slug": "jellaba"
+  }
+},
+{
+  "model": "catalog.category",
+  "pk": "f86c374e-b333-4fb1-a90c-ff50429b4072",
+  "fields": {
+    "name": "Dresses",
+    "slug": "dresses"
+  }
+}
+]
